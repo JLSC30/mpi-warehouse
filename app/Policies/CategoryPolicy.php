@@ -7,6 +7,11 @@ use App\Models\User;
 
 class CategoryPolicy
 {
+
+public function before(User $user): ?bool
+    {
+        return (bool) $user->is_admin;
+    }
     /**
      * Determine whether the user can view any models.
      */

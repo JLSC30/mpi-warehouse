@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -46,5 +47,14 @@ class AppServiceProvider extends ServiceProvider
                 ->uncompromised()
             : null,
         );
+
+         /**
+         * Enforce strict mode for Eloquent models in production.
+         * 
+         * In development, throw an error on N+1 queries (lazy loading).
+         * 
+         * on mass-assigning fields that aren't #[Fillable], and on typos in attribute names. -- instead of failing silently.
+         */
+        Model::shouldBeStrict(app()->isProduction()); 
     }
 }

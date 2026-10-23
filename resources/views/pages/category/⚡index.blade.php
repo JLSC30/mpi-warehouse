@@ -12,27 +12,47 @@ new #[Title('Categories')]
     class extends Component {
 
     use WithPagination;
-    
-    public array $selected = [];
+
 
     #[Url(except: '')]
     public string $search = '';
-    #[Url(except: 'created')]
-    public string $sort = 'created';
-    #[Url(except: 'desc')]
-    public string $direction = 'desc';
 
     #[Computed]
     public function getCategories()
     {
-        return Category::query()->paginate(5);
+        return Category::query()
+        ->filter($this->filters())
+        ->paginate(5);
     }
 
-    public function sortBy(string $column): void
+    private function filters(): array
     {
-        $this->direction = $this->sort === $column && $this->direction === 'asc' ? 'desc' : 'asc';
-        $this->sort = $column;
+        return $this->only(['search', 'code', 'name']);
+    }
+
+    public function clearFilters(): void
+    {
+        $this->reset('search');
         $this->resetPage();
+    }
+
+    public ?int $deletingId = null;
+
+    public function confirmDelete(int $id): void
+    {
+        $this->deletingId = $id;
+        Flux::modal('delete-category')->show();
+    }
+
+    public function delete(): void
+    {
+        $category = Category::findOrFail($this->deletingId);
+        $this->authorize('delete', $category);
+        $category->delete();
+
+        $this->deletingId = null;
+        Flux::modal('delete-category')->close();
+        Flux::toast(variant: 'success', text: "\"{$category->name}\" was moved to the trash.");
     }
 };
 ?>
@@ -52,10 +72,6 @@ new #[Title('Categories')]
             </div>
             
             <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                <flux:button icon="arrow-up-tray">
-                    {{ __('Export CSV') }}
-                </flux:button>
-
                 <flux:button :href="route('categories.index')" variant="primary" icon="plus" wire:navigate>
                     {{ __('New Category') }}
                 </flux:button>
@@ -64,7 +80,11 @@ new #[Title('Categories')]
 
         <div class="flex gap-3 sm:flex-cols-[1fr_12rem_12rem_auto]">
             <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass"
-                :placeholder="__('Search by name or code...')" clearable />
+                :placeholder="__('Search by name or code...')" />
+
+            @if ($search)
+                <flux:button wire:click="clearFilters" variant="subtle" icon='x-mark' />
+            @endif
         </div>
 
         @if ($this->getCategories->isNotEmpty())
@@ -81,12 +101,23 @@ new #[Title('Categories')]
                             </span>
                         </div>
                         <div class="flex shrink-0 items-center gap-2">
-                            <flux:button size="sm" variant="ghost" icon="pencil-square">
-                                {{ __('Edit') }}
-                            </flux:button>
-                            <flux:button size="sm" variant="danger" icon="trash">
-                                {{ __('Delete') }}
-                            </flux:button>
+                            <flux:dropdown position="bottom" align="end">
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"
+                                        inset="top bottom"
+                                        :aria-label="__('Actions for :name', ['name' => $category->name])" />
+
+                                    <flux:menu>
+                                        @can('update', $category)
+                                            <flux:menu.item icon="pencil-square" :href="route('categories.index')"
+                                                wire:navigate>{{ __('Edit') }}</flux:menu.item>
+                                        @endcan
+                                        @can('delete', $category)
+                                            <flux:menu.separator />
+                                            <flux:menu.item icon="trash" wire:click="confirmDelete({{ $category->id }})"
+                                                variant="danger">{{ __('Delete') }}</flux:menu.item>
+                                        @endcan
+                                    </flux:menu>
+                                </flux:dropdown>
                         </div>
                     </li>
                 @endforeach
@@ -104,4 +135,24 @@ new #[Title('Categories')]
         @endif
 
     </div>
+
+    {{-- Delete modal --}}
+    <flux:modal name="delete-category" class="max-w-md">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">{{ __('Delete this category?') }}</flux:heading>
+                <flux:text class="mt-2 text-zinc-500 dark:text-zinc-200">
+                    {{ __('It will be moved to the trash. You can restore it from there later.') }}
+                </flux:text>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <flux:modal.close>
+                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button wire:click="delete" variant="danger" data-test="confirm-delete-category">
+                    {{ __('Move to trash') }}</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 </div>
