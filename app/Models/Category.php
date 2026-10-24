@@ -23,6 +23,7 @@ class Category extends Model
     /**
      * Scope a query using the category filters.
      *
+     * @param  Builder<Category>  $query
      * @param  array<string, mixed>  $filters
      */
     #[Scope]

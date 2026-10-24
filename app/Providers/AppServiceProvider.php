@@ -48,13 +48,11 @@ class AppServiceProvider extends ServiceProvider
             : null,
         );
 
-         /**
+        /**
          * Enforce strict mode for Eloquent models in production.
-         * 
          * In development, throw an error on N+1 queries (lazy loading).
-         * 
          * on mass-assigning fields that aren't #[Fillable], and on typos in attribute names. -- instead of failing silently.
          */
-        Model::shouldBeStrict(app()->isProduction()); 
+        Model::shouldBeStrict(app()->isProduction());
     }
 }

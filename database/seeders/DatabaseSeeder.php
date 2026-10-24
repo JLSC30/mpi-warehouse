@@ -18,19 +18,19 @@ class DatabaseSeeder extends Seeder
     {
         $adminUser = User::query()->firstOrCreate(
             ['email' => 'admin@warehouse.test'],
-            User::factory()->raw([
+            User::factory()->make([
                 'name' => 'Admin User',
                 'email' => 'admin@warehouse.test',
-            ]),
+            ])->getAttributes(),
         );
         $adminUser->forceFill(['name' => 'Admin User', 'is_admin' => true])->save();
 
         $normalUser = User::query()->firstOrCreate(
             ['email' => 'user@warehouse.test'],
-            User::factory()->raw([
+            User::factory()->make([
                 'name' => 'Normal User',
                 'email' => 'user@warehouse.test',
-            ]),
+            ])->getAttributes(),
         );
         $normalUser->forceFill(['name' => 'Normal User', 'is_admin' => false])->save();
 

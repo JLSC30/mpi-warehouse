@@ -4,6 +4,7 @@ namespace App\Livewire\Forms;
 
 use App\Concerns\Custom\CategoryValidationRules;
 use App\Models\Category;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Livewire\Attributes\Locked;
 use Livewire\Form;
 use LogicException;
@@ -19,11 +20,17 @@ class CategoryForm extends Form
 
     public string $code = '';
 
+    /**
+     * @return array<string, array<int, ValidationRule|array<mixed>|string>>
+     */
     protected function rules(): array
     {
         return $this->categoryRules($this->category);
     }
 
+    /**
+     * @return array<string, string>
+     */
     protected function messages(): array
     {
         return $this->categoryFormErrorMessage();
