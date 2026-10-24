@@ -24,13 +24,16 @@
 
         <flux:menu.separator />
 
+        @can('viewAny', App\Models\Category::class)
         <flux:sidebar.nav>
             <flux:sidebar.group expandable :expanded="false" :heading="__('Categories')" class="grid">
                 <flux:sidebar.item :href="route('categories.index')"
-                    :current="request()->routeIs('categories.*')" wire:navigate>List</flux:sidebar.item>
-                <flux:sidebar.item href="#">Trash</flux:sidebar.item>
+                    :current="request()->routeIs('categories.index')" wire:navigate>List</flux:sidebar.item>
+                <flux:sidebar.item :href="route('categories.trash')"
+                    :current="request()->routeIs('categories.trash')" wire:navigate>Trash</flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
+        @endcan
 
         <flux:sidebar.nav>
             <flux:sidebar.group expandable :expanded="false" :heading="__('Locations')" class="grid">
@@ -41,14 +44,6 @@
         </flux:sidebar.nav>
 
         <flux:spacer />
-
-        <flux:sidebar.nav>
-            <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
-                target="_blank">
-                {{ __('Repository') }}
-            </flux:sidebar.item>
-
-        </flux:sidebar.nav>
 
         <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
     </flux:sidebar>

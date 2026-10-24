@@ -8,7 +8,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Url;
 
 
-new #[Title('Categories')] 
+new #[Title('Category List')] 
     class extends Component {
 
     use WithPagination;
@@ -52,7 +52,7 @@ new #[Title('Categories')]
 
         $this->deletingId = null;
         Flux::modal('delete-category')->close();
-        Flux::toast(variant: 'success', text: "\"{$category->name}\" was moved to the trash.");
+        Flux::toast(variant: 'success', heading: 'Delete', text: "\"{$category->name}\" was moved to the trash.");
     }
 };
 ?>
@@ -72,7 +72,7 @@ new #[Title('Categories')]
             </div>
             
             <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                <flux:button :href="route('categories.index')" variant="primary" icon="plus" wire:navigate>
+                <flux:button :href="route('categories.create')" variant="primary" icon="plus" wire:navigate>
                     {{ __('New Category') }}
                 </flux:button>
             </div>
@@ -108,7 +108,7 @@ new #[Title('Categories')]
 
                                     <flux:menu>
                                         @can('update', $category)
-                                            <flux:menu.item icon="pencil-square" :href="route('categories.index')"
+                                            <flux:menu.item icon="pencil-square" :href="route('categories.edit', $category)"
                                                 wire:navigate>{{ __('Edit') }}</flux:menu.item>
                                         @endcan
                                         @can('delete', $category)
