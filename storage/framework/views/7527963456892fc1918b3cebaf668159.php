@@ -179,7 +179,7 @@
                 <?php if (!function_exists('_c62d8a22cb92c98e4d949427cf1cff4c')) { $__blaze->compile('C:\Users\maintenance\Desktop\laravel\warehouse\vendor\livewire\flux\src/../stubs/resources/views/flux/sidebar/item.blade.php', $__blaze->compiledPath.'/c62d8a22cb92c98e4d949427cf1cff4c.php'); require $__blaze->compiledPath.'/c62d8a22cb92c98e4d949427cf1cff4c.php'; } ?>
 <?php if (isset($__slotsc62d8a22cb92c98e4d949427cf1cff4c)) { $__slotsStackc62d8a22cb92c98e4d949427cf1cff4c[] = $__slotsc62d8a22cb92c98e4d949427cf1cff4c; } ?>
 <?php if (isset($__attrsc62d8a22cb92c98e4d949427cf1cff4c)) { $__attrsStackc62d8a22cb92c98e4d949427cf1cff4c[] = $__attrsc62d8a22cb92c98e4d949427cf1cff4c; } ?>
-<?php $__attrsc62d8a22cb92c98e4d949427cf1cff4c = ['href' => route('categories.index'),'current' => request()->routeIs('categories.*'),'wire:navigate' => true]; ?>
+<?php $__attrsc62d8a22cb92c98e4d949427cf1cff4c = ['href' => route('locations.index'),'current' => request()->routeIs('locations.index'),'wire:navigate' => true]; ?>
 <?php $__slotsc62d8a22cb92c98e4d949427cf1cff4c = []; ?>
 <?php $__blaze->pushData($__attrsc62d8a22cb92c98e4d949427cf1cff4c); ?>
 <?php ob_start(); ?>List<?php $__slotsc62d8a22cb92c98e4d949427cf1cff4c['slot'] = new \Illuminate\View\ComponentSlot(trim(ob_get_clean()), []); ?>
@@ -191,12 +191,12 @@
                 <?php if (!function_exists('_c62d8a22cb92c98e4d949427cf1cff4c')) { $__blaze->compile('C:\Users\maintenance\Desktop\laravel\warehouse\vendor\livewire\flux\src/../stubs/resources/views/flux/sidebar/item.blade.php', $__blaze->compiledPath.'/c62d8a22cb92c98e4d949427cf1cff4c.php'); require $__blaze->compiledPath.'/c62d8a22cb92c98e4d949427cf1cff4c.php'; } ?>
 <?php if (isset($__slotsc62d8a22cb92c98e4d949427cf1cff4c)) { $__slotsStackc62d8a22cb92c98e4d949427cf1cff4c[] = $__slotsc62d8a22cb92c98e4d949427cf1cff4c; } ?>
 <?php if (isset($__attrsc62d8a22cb92c98e4d949427cf1cff4c)) { $__attrsStackc62d8a22cb92c98e4d949427cf1cff4c[] = $__attrsc62d8a22cb92c98e4d949427cf1cff4c; } ?>
-<?php $__attrsc62d8a22cb92c98e4d949427cf1cff4c = ['href' => '#']; ?>
+<?php $__attrsc62d8a22cb92c98e4d949427cf1cff4c = ['href' => route('locations.trash'),'current' => request()->routeIs('locations.trash'),'wire:navigate' => true]; ?>
 <?php $__slotsc62d8a22cb92c98e4d949427cf1cff4c = []; ?>
 <?php $__blaze->pushData($__attrsc62d8a22cb92c98e4d949427cf1cff4c); ?>
 <?php ob_start(); ?>Trash<?php $__slotsc62d8a22cb92c98e4d949427cf1cff4c['slot'] = new \Illuminate\View\ComponentSlot(trim(ob_get_clean()), []); ?>
 <?php $__blaze->pushSlots($__slotsc62d8a22cb92c98e4d949427cf1cff4c); ?>
-<?php _c62d8a22cb92c98e4d949427cf1cff4c($__blaze, $__attrsc62d8a22cb92c98e4d949427cf1cff4c, $__slotsc62d8a22cb92c98e4d949427cf1cff4c, [], [], $__this ?? (isset($this) ? $this : null)); ?>
+<?php _c62d8a22cb92c98e4d949427cf1cff4c($__blaze, $__attrsc62d8a22cb92c98e4d949427cf1cff4c, $__slotsc62d8a22cb92c98e4d949427cf1cff4c, ['href', 'current', 'wire:navigate'], [], $__this ?? (isset($this) ? $this : null)); ?>
 <?php if (! empty($__slotsStackc62d8a22cb92c98e4d949427cf1cff4c)) { $__slotsc62d8a22cb92c98e4d949427cf1cff4c = array_pop($__slotsStackc62d8a22cb92c98e4d949427cf1cff4c); } ?>
 <?php if (! empty($__attrsStackc62d8a22cb92c98e4d949427cf1cff4c)) { $__attrsc62d8a22cb92c98e4d949427cf1cff4c = array_pop($__attrsStackc62d8a22cb92c98e4d949427cf1cff4c); } ?>
 <?php $__blaze->popData(); ?>

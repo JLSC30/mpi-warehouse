@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,7 +24,11 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@warehouse.test',
             ])->getAttributes(),
         );
-        $adminUser->forceFill(['name' => 'Admin User', 'is_admin' => true])->save();
+        $adminUser->forceFill([
+            'name' => 'Admin User',
+            'email_verified_at' => now(),
+            'is_admin' => true,
+        ])->save();
 
         $normalUser = User::query()->firstOrCreate(
             ['email' => 'user@warehouse.test'],
@@ -32,8 +37,14 @@ class DatabaseSeeder extends Seeder
                 'email' => 'user@warehouse.test',
             ])->getAttributes(),
         );
-        $normalUser->forceFill(['name' => 'Normal User', 'is_admin' => false])->save();
+        $normalUser->forceFill([
+            'name' => 'Normal User',
+            'email_verified_at' => now(),
+            'is_admin' => false,
+        ])->save();
 
         Category::factory()->count(20)->create();
+
+        Location::factory()->count(10)->create();
     }
 }

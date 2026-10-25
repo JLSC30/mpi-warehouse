@@ -37,9 +37,10 @@
 
         <flux:sidebar.nav>
             <flux:sidebar.group expandable :expanded="false" :heading="__('Locations')" class="grid">
-                <flux:sidebar.item :href="route('categories.index')"
-                    :current="request()->routeIs('categories.*')" wire:navigate>List</flux:sidebar.item>
-                <flux:sidebar.item href="#">Trash</flux:sidebar.item>
+                <flux:sidebar.item :href="route('locations.index')"
+                    :current="request()->routeIs('locations.index')" wire:navigate>List</flux:sidebar.item>
+                <flux:sidebar.item :href="route('locations.trash')"
+                    :current="request()->routeIs('locations.trash')" wire:navigate>Trash</flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
