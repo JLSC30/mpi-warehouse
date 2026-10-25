@@ -22,6 +22,7 @@ new #[Title('Category List')]
     {
         return Category::query()
         ->filter($this->filters())
+        ->orderBy('created_at','desc')
         ->paginate(5);
     }
 
