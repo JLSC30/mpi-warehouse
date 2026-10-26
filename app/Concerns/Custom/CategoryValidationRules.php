@@ -15,7 +15,7 @@ trait CategoryValidationRules
     {
         return [
             'name' => ['required', 'string', 'max:32'],
-            'code' => ['required', 'string', 'alpha_dash', 'max:16', Rule::unique(Category::class)->ignore($category)],
+            'code' => ['required', 'string', 'alpha_dash', 'max:16', Rule::unique(Category::class)->ignore($category)->where(fn ($query) => $query->whereNull('deleted_at'))],
         ];
     }
 

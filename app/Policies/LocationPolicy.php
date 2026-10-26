@@ -4,13 +4,11 @@ namespace App\Policies;
 
 use App\Models\Location;
 use App\Models\User;
+use App\Policies\AdminPolicyTrait;
 
 class LocationPolicy
 {
-    public function before(User $user): ?bool
-    {
-        return (bool) $user->is_admin;
-    }
+    use AdminPolicyTrait;
 
     /**
      * Determine whether the user can view any models.

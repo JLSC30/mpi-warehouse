@@ -14,7 +14,7 @@ trait SupplierValidationRules
     protected function supplierRules(?Supplier $supplier = null): array
     {
         return [
-            'name' => ['required', 'string', 'max:32', Rule::unique(Supplier::class)->ignore($supplier)],
+            'name' => ['required', 'string', 'max:32', Rule::unique(Supplier::class)->ignore($supplier)->where(fn ($query) => $query->whereNull('deleted_at'))],
         ];
     }
 }

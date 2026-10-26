@@ -14,7 +14,7 @@ trait LocationValidationRules
     protected function locationRules(?Location $location = null): array
     {
         return [
-            'name' => ['required', 'string', 'max:32', Rule::unique(Location::class)->ignore($location)],
+            'name' => ['required', 'string', 'max:32', Rule::unique(Location::class)->ignore($location)->where(fn ($query) => $query->whereNull('deleted_at'))],
         ];
     }
 }

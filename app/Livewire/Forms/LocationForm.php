@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use App\Concerns\Custom\LocationValidationRules;
 use App\Models\Location;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Form;
 use LogicException;
@@ -30,6 +31,12 @@ class LocationForm extends Form
     {
         $this->validate();
 
+        if (Location::onlyTrashed()->where('name', $this->name)->exists()) {
+            throw ValidationException::withMessages([
+                'name' => 'This name belongs to a trashed location. Restore it from the trashed instead of creating a duplicate.'
+            ]);
+        }
+
         $location = Location::create([
             'name' => $this->name,
         ]);
@@ -54,6 +61,12 @@ class LocationForm extends Form
         }
 
         $this->validate();
+        
+        if (Location::onlyTrashed()->where('name', $this->name)->exists()) {
+            throw ValidationException::withMessages([
+                'name' => 'This name belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.'
+            ]);
+        }
 
         $location->update([
             'name' => $this->name,
