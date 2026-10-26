@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use App\Models\Location;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
@@ -43,6 +44,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware(['can:viewAny,'.Location::class, 'can:update,'.Location::class])
         ->name('locations.edit');
 
+    // Supplier route
+    Route::livewire('suppliers', 'pages::supplier.index')
+        ->middleware('can:viewAny,'.Supplier::class)
+        ->name('suppliers.index');
+
+    Route::livewire('suppliers/trash', 'pages::supplier.trash')
+        ->middleware(['can:viewAny,'.Supplier::class, 'can:forceDelete,'.Supplier::class])
+        ->name('suppliers.trash');
+    
+    Route::livewire('suppliers/create', 'pages::supplier.create')
+        ->middleware(['can:viewAny,'.Supplier::class, 'can:create,'.Supplier::class])
+        ->name('suppliers.create');
+
+    Route::livewire('suppliers/{supplier}/edit', 'pages::supplier.edit')
+        ->middleware(['can:viewAny,'.Supplier::class, 'can:update,'.Supplier::class])
+        ->name('suppliers.edit');
 });
 
 require __DIR__.'/settings.php';

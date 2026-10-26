@@ -86,7 +86,7 @@ new #[Title('Location Trash')] class extends Component {
 
         <div class="flex gap-3 sm:flex-cols-[1fr_12rem_12rem_auto]">
             <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass"
-                :placeholder="__('Search by name or code...')" />
+                :placeholder="__('Search by name...')" />
 
             @if ($search)
                 <flux:button wire:click="clearFilters" variant="subtle" icon='x-mark' />
@@ -96,32 +96,32 @@ new #[Title('Location Trash')] class extends Component {
         @if ($this->getLocations->isNotEmpty())
             <ul
                 class="mt-2 divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700">
-                @foreach ($this->getLocations as $category)
+                @foreach ($this->getLocations as $location)
                     <li class="flex items-center justify-between gap-4 bg-white px-3 py-3 transition-colors hover:bg-zinc-50 dark:bg-zinc-800 dark:hover:bg-zinc-700/40 sm:px-6"
-                        wire:key="category-{{ $category->id }}">
+                        wire:key="location-{{ $location->id }}">
                         <div class="flex min-w-0 flex-col gap-1">
                             <span class="truncate font-medium text-zinc-900 dark:text-white">
-                                {{ $category->name }}
+                                {{ $location->name }}
                             </span>
                             <span class="text-xs text-zinc-500 dark:text-zinc-400">
-                                {{ __('Deleted :item', ['item' => $category->deleted_at->diffForHumans()]) }}
+                                {{ __('Deleted :item', ['item' => $location->deleted_at->diffForHumans()]) }}
                             </span>
                         </div>
                         <div class="flex shrink-0 items-center gap-2">
                             <flux:dropdown position="bottom" align="end">
                                 <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"
                                     inset="top bottom"
-                                    :aria-label="__('Actions for :name', ['name' => $category->name])" />
+                                    :aria-label="__('Actions for :name', ['name' => $location->name])" />
 
                                 <flux:menu>
-                                    @can('restore', $category)
+                                    @can('restore', $location)
                                         <flux:menu.item icon="arrow-uturn-left" size="sm"
-                                            wire:click="restore({{ $category->id }})">{{ __('Restore') }}</flux:menu.item>
+                                            wire:click="restore({{ $location->id }})">{{ __('Restore') }}</flux:menu.item>
                                     @endcan
-                                    @can('forceDelete', $category)
+                                    @can('forceDelete', $location)
                                         <flux:menu.separator />
                                         <flux:menu.item icon="trash" size="sm"
-                                            wire:click="confirmForceDelete({{ $category->id }})" variant="danger">
+                                            wire:click="confirmForceDelete({{ $location->id }})" variant="danger">
                                             {{ __('Delete forever') }}</flux:menu.item>
                                     @endcan
                                 </flux:menu>

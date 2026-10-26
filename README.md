@@ -26,20 +26,23 @@ composer run setup
 
 The setup script installs PHP and JavaScript dependencies, creates `.env` from `.env.example` when needed, generates the application key, runs database migrations, and builds the frontend assets. The default environment uses SQLite.
 
-Optionally seed the database with local sample users and categories:
+Optionally seed a fresh local database with demo users and warehouse data. In PowerShell, from the project directory, run:
 
-```bash
+```powershell
+$env:APP_ENV = 'local'
 php artisan db:seed
 ```
 
-On a fresh database, the seeder creates these sample accounts:
+The command runs `DatabaseSeeder`, which calls `LocalDemoSeeder`. The demo seeder creates sample users, categories, locations, and suppliers, and refuses to run unless `APP_ENV=local`. The environment setting above applies to the current PowerShell session. If your `.env` already sets `APP_ENV=local`, you can run `php artisan db:seed` directly.
+
+Run this once on a fresh local database; each run adds more sample categories, locations, and suppliers. On a fresh database, it also creates these sample accounts:
 
 | Role | Email | Password |
 | --- | --- | --- |
 | Administrator | `admin@warehouse.test` | `password` |
 | Standard user | `user@warehouse.test` | `password` |
 
-These are development-only credentials. Do not use them in a deployed or publicly accessible environment.
+These are development-only credentials. Do not use them in a deployed or publicly accessible environment. Provision production administrators only through a separate, controlled account-provisioning process.
 
 Start the development server, queue listener, and Vite server together:
 
@@ -58,11 +61,11 @@ Open [http://localhost:8000](http://localhost:8000). Register or sign in, then u
 | `npm run build` | Build production frontend assets |
 | `npm run dev` | Run only the Vite development server |
 | `php artisan migrate` | Apply pending database migrations |
-| `php artisan db:seed` | Add the local sample users and categories |
+| `php artisan db:seed` | Add local-only sample users, categories, locations, and suppliers; blocked outside `APP_ENV=local` |
 
 ## Authorization
 
-Category pages and actions are restricted to users whose `is_admin` flag is enabled. The database seeder creates a local administrator for development. For other environments, assign administrator access through your established account-provisioning process; do not expose sample credentials or grant admin access to untrusted users.
+Category pages and actions are restricted to users whose `is_admin` flag is enabled. The [LocalDemoSeeder](database/seeders/LocalDemoSeeder.php) creates a local administrator for development and refuses to run outside `APP_ENV=local`. No production administrator is seeded; provision administrator access through a separate, controlled account-provisioning process.
 
 ## Technology
 
