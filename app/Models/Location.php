@@ -19,7 +19,7 @@ class Location extends Model
     /**
      * Scope a query using the category filters.
      *
-     * @param  Builder<Category>  $query
+     * @param  Builder<Location>  $query
      * @param  array<string, mixed>  $filters
      */
     #[Scope]
