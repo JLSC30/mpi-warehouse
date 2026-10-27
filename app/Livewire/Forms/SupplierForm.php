@@ -33,7 +33,7 @@ class SupplierForm extends Form
 
         if (Supplier::onlyTrashed()->where('name', $this->name)->exists()) {
             throw ValidationException::withMessages([
-                'name' => 'This name belongs to a trashed supplier. Restore it from the trashed instead of creating a duplicate.'
+                'name' => 'This name belongs to a trashed supplier. Restore it from the trashed instead of creating a duplicate.',
             ]);
         }
 
@@ -64,7 +64,7 @@ class SupplierForm extends Form
 
         if (Supplier::onlyTrashed()->where('name', $this->name)->exists()) {
             throw ValidationException::withMessages([
-                'name' => 'This name belongs to a trashed supplier. Restore it from the trashed instead of creating a duplicate.'
+                'name' => 'This name belongs to a trashed supplier. Restore it from the trashed instead of creating a duplicate.',
             ]);
         }
 
