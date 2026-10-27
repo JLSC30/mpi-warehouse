@@ -8,6 +8,7 @@ use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use RuntimeException;
 
 class LocalDemoSeeder extends Seeder
@@ -23,12 +24,13 @@ class LocalDemoSeeder extends Seeder
             throw new RuntimeException('The demo seeder can only run in the local environment.');
         }
 
+        $adminUserAttributes = User::factory()->make([
+            'name' => 'Admin User',
+            'email' => 'admin@warehouse.test',
+        ])->getAttributes();
         $adminUser = User::query()->firstOrCreate(
             ['email' => 'admin@warehouse.test'],
-            User::factory()->make([
-                'name' => 'Admin User',
-                'email' => 'admin@warehouse.test',
-            ])->getAttributes(),
+            Arr::only($adminUserAttributes, ['name', 'password']),
         );
         $adminUser->forceFill([
             'name' => 'Admin User',
@@ -36,12 +38,13 @@ class LocalDemoSeeder extends Seeder
             'is_admin' => true,
         ])->save();
 
+        $normalUserAttributes = User::factory()->make([
+            'name' => 'Normal User',
+            'email' => 'user@warehouse.test',
+        ])->getAttributes();
         $normalUser = User::query()->firstOrCreate(
             ['email' => 'user@warehouse.test'],
-            User::factory()->make([
-                'name' => 'Normal User',
-                'email' => 'user@warehouse.test',
-            ])->getAttributes(),
+            Arr::only($normalUserAttributes, ['name', 'password']),
         );
         $normalUser->forceFill([
             'name' => 'Normal User',

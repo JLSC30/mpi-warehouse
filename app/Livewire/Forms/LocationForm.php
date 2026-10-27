@@ -33,7 +33,7 @@ class LocationForm extends Form
 
         if (Location::onlyTrashed()->where('name', $this->name)->exists()) {
             throw ValidationException::withMessages([
-                'name' => 'This name belongs to a trashed location. Restore it from the trashed instead of creating a duplicate.'
+                'name' => 'This name belongs to a trashed location. Restore it from the trashed instead of creating a duplicate.',
             ]);
         }
 
@@ -61,10 +61,10 @@ class LocationForm extends Form
         }
 
         $this->validate();
-        
+
         if (Location::onlyTrashed()->where('name', $this->name)->exists()) {
             throw ValidationException::withMessages([
-                'name' => 'This name belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.'
+                'name' => 'This name belongs to a trashed location. Restore it from the trashed instead of creating a duplicate.',
             ]);
         }
 

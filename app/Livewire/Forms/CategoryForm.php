@@ -43,7 +43,7 @@ class CategoryForm extends Form
 
         if (Category::onlyTrashed()->where('code', $this->code)->exists()) {
             throw ValidationException::withMessages([
-                'code' => 'This code belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.'
+                'code' => 'This code belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.',
             ]);
         }
 
@@ -76,7 +76,7 @@ class CategoryForm extends Form
 
         if (Category::onlyTrashed()->where('code', $this->code)->exists()) {
             throw ValidationException::withMessages([
-                'code' => 'This code belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.'
+                'code' => 'This code belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.',
             ]);
         }
 

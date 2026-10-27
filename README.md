@@ -35,7 +35,7 @@ php artisan db:seed
 
 The command runs `DatabaseSeeder`, which calls `LocalDemoSeeder`. The demo seeder creates sample users, categories, locations, and suppliers, and refuses to run unless `APP_ENV=local`. The environment setting above applies to the current PowerShell session. If your `.env` already sets `APP_ENV=local`, you can run `php artisan db:seed` directly.
 
-Run this once on a fresh local database; each run adds more sample categories, locations, and suppliers. On a fresh database, it also creates these sample accounts:
+Run this once on a fresh local database. Each run adds more sample categories, locations, and suppliers. The demo accounts are created only if they do not already exist, so rerunning the seeder does not reset their passwords. On a fresh database, it creates these sample accounts:
 
 | Role | Email | Password |
 | --- | --- | --- |
