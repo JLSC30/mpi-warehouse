@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use App\Concerns\Custom\SupplierValidationRules;
 use App\Models\Supplier;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Form;
 use LogicException;
@@ -30,6 +31,12 @@ class SupplierForm extends Form
     {
         $this->validate();
 
+        if (Supplier::onlyTrashed()->where('name', $this->name)->exists()) {
+            throw ValidationException::withMessages([
+                'name' => 'This name belongs to a trashed supplier. Restore it from the trashed instead of creating a duplicate.',
+            ]);
+        }
+
         $supplier = Supplier::create([
             'name' => $this->name,
         ]);
@@ -54,6 +61,12 @@ class SupplierForm extends Form
         }
 
         $this->validate();
+
+        if (Supplier::onlyTrashed()->where('name', $this->name)->exists()) {
+            throw ValidationException::withMessages([
+                'name' => 'This name belongs to a trashed supplier. Restore it from the trashed instead of creating a duplicate.',
+            ]);
+        }
 
         $supplier->update([
             'name' => $this->name,

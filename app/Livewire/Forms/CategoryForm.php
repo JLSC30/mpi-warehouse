@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use App\Concerns\Custom\CategoryValidationRules;
 use App\Models\Category;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Form;
 use LogicException;
@@ -40,6 +41,12 @@ class CategoryForm extends Form
     {
         $this->validate();
 
+        if (Category::onlyTrashed()->where('code', $this->code)->exists()) {
+            throw ValidationException::withMessages([
+                'code' => 'This code belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.',
+            ]);
+        }
+
         $category = Category::create([
             'name' => $this->name,
             'code' => $this->code,
@@ -66,6 +73,12 @@ class CategoryForm extends Form
         }
 
         $this->validate();
+
+        if (Category::onlyTrashed()->where('code', $this->code)->exists()) {
+            throw ValidationException::withMessages([
+                'code' => 'This code belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.',
+            ]);
+        }
 
         $category->update([
             'name' => $this->name,

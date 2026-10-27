@@ -52,7 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('suppliers/trash', 'pages::supplier.trash')
         ->middleware(['can:viewAny,'.Supplier::class, 'can:forceDelete,'.Supplier::class])
         ->name('suppliers.trash');
-    
+
     Route::livewire('suppliers/create', 'pages::supplier.create')
         ->middleware(['can:viewAny,'.Supplier::class, 'can:create,'.Supplier::class])
         ->name('suppliers.create');
