@@ -10,4 +10,14 @@ trait AdminPolicyTrait
     {
         return $user->is_admin ? true : null;
     }
+
+    public function viewAny(User $user): bool
+    {
+        return (bool) $user->is_admin;
+    }
+
+    public function create(User $user): bool
+    {
+        return (bool) $user->is_admin;
+    }
 }

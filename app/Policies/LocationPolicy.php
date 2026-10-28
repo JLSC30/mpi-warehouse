@@ -10,25 +10,9 @@ class LocationPolicy
     use AdminPolicyTrait;
 
     /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        return (bool) $user->is_admin;
-    }
-
-    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, Location $location): bool
-    {
-        return (bool) $user->is_admin;
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
     {
         return (bool) $user->is_admin;
     }
