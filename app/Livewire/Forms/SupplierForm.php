@@ -3,16 +3,16 @@
 namespace App\Livewire\Forms;
 
 use App\Concerns\Custom\SupplierValidationRules;
+use App\Livewire\Forms\Concerns\RejectTrashedValue;
 use App\Models\Supplier;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Form;
 use LogicException;
 
 class SupplierForm extends Form
 {
-    use SupplierValidationRules;
+    use RejectTrashedValue, SupplierValidationRules;
 
     #[Locked]
     public ?Supplier $supplier = null;
@@ -31,11 +31,7 @@ class SupplierForm extends Form
     {
         $this->validate();
 
-        if (Supplier::onlyTrashed()->where('name', $this->name)->exists()) {
-            throw ValidationException::withMessages([
-                'name' => 'This name belongs to a trashed supplier. Restore it from the trashed instead of creating a duplicate.',
-            ]);
-        }
+        $this->rejectTrashedValue(Supplier::class, 'name', $this->name, 'supplier');
 
         $supplier = Supplier::create([
             'name' => $this->name,
@@ -62,11 +58,7 @@ class SupplierForm extends Form
 
         $this->validate();
 
-        if (Supplier::onlyTrashed()->where('name', $this->name)->exists()) {
-            throw ValidationException::withMessages([
-                'name' => 'This name belongs to a trashed supplier. Restore it from the trashed instead of creating a duplicate.',
-            ]);
-        }
+        $this->rejectTrashedValue(Supplier::class, 'name', $this->name, 'supplier');
 
         $supplier->update([
             'name' => $this->name,

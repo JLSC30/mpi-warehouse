@@ -3,16 +3,16 @@
 namespace App\Livewire\Forms;
 
 use App\Concerns\Custom\CategoryValidationRules;
+use App\Livewire\Forms\Concerns\RejectTrashedValue;
 use App\Models\Category;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Form;
 use LogicException;
 
 class CategoryForm extends Form
 {
-    use CategoryValidationRules;
+    use CategoryValidationRules, RejectTrashedValue;
 
     #[Locked]
     public ?Category $category = null;
@@ -41,11 +41,7 @@ class CategoryForm extends Form
     {
         $this->validate();
 
-        if (Category::onlyTrashed()->where('code', $this->code)->exists()) {
-            throw ValidationException::withMessages([
-                'code' => 'This code belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.',
-            ]);
-        }
+        $this->rejectTrashedValue(Category::class, 'code', $this->code, 'category');
 
         $category = Category::create([
             'name' => $this->name,
@@ -74,11 +70,7 @@ class CategoryForm extends Form
 
         $this->validate();
 
-        if (Category::onlyTrashed()->where('code', $this->code)->exists()) {
-            throw ValidationException::withMessages([
-                'code' => 'This code belongs to a trashed category. Restore it from the trashed instead of creating a duplicate.',
-            ]);
-        }
+        $this->rejectTrashedValue(Category::class, 'code', $this->code, 'category');
 
         $category->update([
             'name' => $this->name,

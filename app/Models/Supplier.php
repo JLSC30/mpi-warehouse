@@ -17,7 +17,7 @@ class Supplier extends Model
     use HasFactory, SoftDeletes;
 
     /**
-     * Scope a query using the category filters.
+     * Scope a query using the supplier filters.
      *
      * @param  Builder<Supplier>  $query
      * @param  array<string, mixed>  $filters

@@ -17,7 +17,7 @@ class Location extends Model
     use HasFactory, SoftDeletes;
 
     /**
-     * Scope a query using the category filters.
+     * Scope a query using the location filters.
      *
      * @param  Builder<Location>  $query
      * @param  array<string, mixed>  $filters
