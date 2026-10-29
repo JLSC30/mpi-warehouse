@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\FiltersBySearch;
 use App\Policies\CategoryPolicy;
 use Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -19,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Category extends Model
 {
     /** @use HasFactory<CategoryFactory> */
-    use FiltersBySearch, HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     /**
      * Scope a query using the category filters.
@@ -30,6 +29,21 @@ class Category extends Model
     #[Scope]
     protected function filter(Builder $query, array $filters): void
     {
-        $this->applySearchFilter($query, $filters, ['name', 'code']);
+        $search = $filters['search'] ?? null;
+
+        if (is_string($search) && ($search = trim($search)) !== '') {
+            $query->where(function (Builder $query) use ($search): void {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
+
+        foreach (['code', 'name'] as $attribute) {
+            $value = $filters[$attribute] ?? null;
+
+            if (is_string($value) && ($value = trim($value)) !== '') {
+                $query->where($attribute, 'like', "%{$value}%");
+            }
+        }
     }
 }

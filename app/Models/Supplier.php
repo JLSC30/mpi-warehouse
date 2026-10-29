@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\FiltersBySearch;
 use Database\Factories\SupplierFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -15,10 +14,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Supplier extends Model
 {
     /** @use HasFactory<SupplierFactory> */
-    use FiltersBySearch, HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     /**
-     * Scope a query using the category filters.
+     * Scope a query using the supplier filters.
      *
      * @param  Builder<Supplier>  $query
      * @param  array<string, mixed>  $filters
@@ -26,6 +25,20 @@ class Supplier extends Model
     #[Scope]
     protected function filter(Builder $query, array $filters): void
     {
-        $this->applySearchFilter($query, $filters, ['name']);
+        $search = $filters['search'] ?? null;
+
+        if (is_string($search) && ($search = trim($search)) !== '') {
+            $query->where(function (Builder $query) use ($search): void {
+                $query->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        foreach (['name'] as $attribute) {
+            $value = $filters[$attribute] ?? null;
+
+            if (is_string($value) && ($value = trim($value)) !== '') {
+                $query->where($attribute, 'like', "%{$value}%");
+            }
+        }
     }
 }
