@@ -92,3 +92,22 @@ test('supplier form rejects a code already assigned to another supplier', functi
 
     $this->assertDatabaseCount('suppliers', 1);
 });
+
+test('supplier form rejects a name belonging to a trashed supplier and shows the restore message', function () {
+    $trashed = Supplier::factory()->create([
+        'name' => 'supplier a',
+    ]);
+    $trashed->delete();
+
+    $admin = User::factory()->create();
+    $admin->forceFill(['is_admin' => true])->save();
+
+    $this->actingAs($admin);
+
+    Livewire::test('pages::supplier.create')
+        ->set('form.name', 'supplier a')
+        ->call('save')
+        ->assertSee('This name belongs to a trashed supplier. Restore it from the trash instead of creating a duplicate.');
+
+    $this->assertDatabaseCount('suppliers', 1);
+});

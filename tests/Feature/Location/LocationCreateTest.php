@@ -92,3 +92,22 @@ test('location form rejects a code already assigned to another location', functi
 
     $this->assertDatabaseCount('locations', 1);
 });
+
+test('location form rejects a name belonging to a trashed location and shows the restore message', function () {
+    $trashed = Location::factory()->create([
+        'name' => 'location a',
+    ]);
+    $trashed->delete();
+
+    $admin = User::factory()->create();
+    $admin->forceFill(['is_admin' => true])->save();
+
+    $this->actingAs($admin);
+
+    Livewire::test('pages::location.create')
+        ->set('form.name', 'location a')
+        ->call('save')
+        ->assertSee('This name belongs to a trashed location. Restore it from the trash instead of creating a duplicate.');
+
+    $this->assertDatabaseCount('locations', 1);
+});

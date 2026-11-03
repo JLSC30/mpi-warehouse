@@ -4,6 +4,7 @@ use Livewire\Component;
 use Livewire\Attributes\Title;
 use App\Models\Supplier;
 use App\Livewire\Forms\SupplierForm;
+use Flux\Flux;
 
 new #[Title('New Supplier')] 
     class extends Component

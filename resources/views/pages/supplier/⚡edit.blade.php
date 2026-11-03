@@ -3,6 +3,7 @@
 use Livewire\Component;
 use App\Livewire\Forms\SupplierForm;
 use App\Models\Supplier;
+use Flux\Flux;
 
 
 new #[Title('Edit Supplier')]

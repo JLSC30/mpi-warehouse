@@ -28,7 +28,7 @@ new #[Title('Category List')]
 
     private function filters(): array
     {
-        return $this->only(['search', 'code', 'name']);
+        return ['search' => $this->search];
     }
 
     public function clearFilters(): void
@@ -47,6 +47,10 @@ new #[Title('Category List')]
 
     public function delete(): void
     {
+        if ($this->deletingId === null) {
+            return;
+        }
+
         $category = Category::findOrFail($this->deletingId);
         $this->authorize('delete', $category);
         $category->delete();

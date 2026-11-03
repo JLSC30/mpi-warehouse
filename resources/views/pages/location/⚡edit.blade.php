@@ -3,6 +3,7 @@
 use Livewire\Component;
 use App\Livewire\Forms\LocationForm;
 use App\Models\Location;
+use Flux\Flux;
 
 
 new #[Title('Edit Location')]
