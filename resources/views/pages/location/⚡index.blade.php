@@ -28,7 +28,7 @@ new #[Title('Location List')]
 
     private function filters(): array
     {
-        return $this->only(['search', 'name']);
+        return ['search' => $this->search];
     }
 
     public function clearFilters(): void
@@ -47,6 +47,10 @@ new #[Title('Location List')]
 
     public function delete(): void
     {
+        if ($this->deletingId === null) {
+            return;
+        }
+        
         $location = Location::findOrFail($this->deletingId);
         $this->authorize('delete', $location);
         $location->delete();

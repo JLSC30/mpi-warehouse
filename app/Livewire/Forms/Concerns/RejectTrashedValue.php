@@ -15,7 +15,7 @@ trait RejectTrashedValue
     {
         if ($model::query()->withoutGlobalScope(SoftDeletingScope::class)->whereNotNull('deleted_at')->where($field, $value)->exists()) {
             throw ValidationException::withMessages([
-                $field => "This {$field} belongs to a trashed {$entity}. Restore it from the trashe instead of creating a duplicate.",
+                $field => "This {$field} belongs to a trashed {$entity}. Restore it from the trash instead of creating a duplicate.",
             ]);
         }
     }

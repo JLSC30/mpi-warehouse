@@ -4,7 +4,6 @@ use Livewire\Component;
 
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Computed;
-use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use App\Models\Category;
 use Livewire\Attributes\Url;
@@ -24,7 +23,7 @@ new #[Title('Category Trash')] class extends Component {
 
     private function filters(): array
     {
-        return $this->only(['search', 'code', 'name']);
+        return ['search' => $this->search];
     }
 
     public function clearFilters(): void
@@ -55,6 +54,10 @@ new #[Title('Category Trash')] class extends Component {
 
     public function forceDelete(): void
     {
+        if ($this->deletingId === null) {
+            return;
+        }
+
         $category = Category::onlyTrashed()->findOrFail($this->deletingId);
 
         $this->authorize('forceDelete', $category);

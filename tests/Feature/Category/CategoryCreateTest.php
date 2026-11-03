@@ -129,3 +129,25 @@ test('category form rejects a code already assigned to another category', functi
 
     $this->assertDatabaseCount('categories', 1);
 });
+
+test('category form rejects a code belonging to a trashed category and shows the restore message', function () {
+    $trashed = Category::factory()->create([
+        'name' => 'Old tools',
+        'code' => 'TOOLS',
+    ]);
+    $trashed->delete();
+
+    $admin = User::factory()->create();
+    $admin->forceFill(['is_admin' => true])->save();
+
+    $this->actingAs($admin);
+
+    Livewire::test('pages::category.create')
+        ->set('form.name', 'New tools')
+        ->set('form.code', 'TOOLS')
+        ->call('save')
+        ->assertSee('This code belongs to a trashed category. Restore it from the trash instead of creating a duplicate.');
+
+    $this->assertDatabaseCount('categories', 1);
+    $this->assertDatabaseMissing('categories', ['name' => 'New tools']);
+});

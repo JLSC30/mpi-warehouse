@@ -28,7 +28,7 @@ new #[Title('Supplier List')]
 
     private function filters(): array
     {
-        return $this->only(['search', 'name']);
+        return ['search' => $this->search];
     }
 
     public function clearFilters(): void
@@ -47,6 +47,10 @@ new #[Title('Supplier List')]
 
     public function delete(): void
     {
+        if ($this->deletingId === null) {
+            return;
+        }
+
         $supplier = Supplier::findOrFail($this->deletingId);
         $this->authorize('delete', $supplier);
         $supplier->delete();

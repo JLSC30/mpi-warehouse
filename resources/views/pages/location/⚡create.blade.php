@@ -4,6 +4,7 @@ use Livewire\Component;
 use Livewire\Attributes\Title;
 use App\Models\Location;
 use App\Livewire\Forms\LocationForm;
+use Flux\Flux;
 
 new #[Title('New Location')] 
     class extends Component

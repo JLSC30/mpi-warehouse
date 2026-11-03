@@ -4,6 +4,7 @@ use Livewire\Component;
 use Livewire\Attributes\Title;
 use App\Models\Category;
 use App\Livewire\Forms\CategoryForm;
+use Flux\Flux;
 
 new #[Title('New Category')] 
     class extends Component
