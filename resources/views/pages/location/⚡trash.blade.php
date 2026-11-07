@@ -87,14 +87,7 @@ new #[Title('Location Trash')] class extends Component {
         <flux:callout variant="danger" icon="x-circle"
             :heading="__('Deleted locations stay here until you restore them or delete them for good.')" />
 
-        <div class="flex gap-3 sm:flex-cols-[1fr_12rem_12rem_auto]">
-            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass"
-                :placeholder="__('Search by name...')" />
-
-            @if ($search)
-                <flux:button wire:click="clearFilters" variant="subtle" icon='x-mark' />
-            @endif
-        </div>
+        @include('pages.partials.search-bar', ['placeholder' => __('Search by name...')])
 
         @if ($this->getLocations->isNotEmpty())
             <ul
@@ -140,9 +133,7 @@ new #[Title('Location Trash')] class extends Component {
                 </div>
             @endif
         @else
-            <div class="rounded-xl border border-dashed border-zinc-300 px-4 py-12 text-center dark:border-zinc-700">
-                <flux:text>{{ __('Trash is empty.') }}</flux:text>
-            </div>
+            @include('pages.partials.empty-state', ['message' => __('Trash is empty.')])
         @endif
 
     </div>
