@@ -6,13 +6,10 @@ use App\Models\Location;
 use Livewire\Attributes\Title;
 use Livewire\WithPagination;
 use Livewire\Attributes\Url;
+use Flux\Flux;
 
-
-new #[Title('Location List')] 
-    class extends Component {
-
+new #[Title('Location List')] class extends Component {
     use WithPagination;
-
 
     #[Url(except: '')]
     public string $search = '';
@@ -20,10 +17,7 @@ new #[Title('Location List')]
     #[Computed]
     public function getLocations()
     {
-        return Location::query()
-        ->filter($this->filters())
-        ->orderBy('created_at','desc')
-        ->paginate(5);
+        return Location::query()->filter($this->filters())->orderBy('created_at', 'desc')->paginate(5);
     }
 
     private function filters(): array
@@ -50,7 +44,7 @@ new #[Title('Location List')]
         if ($this->deletingId === null) {
             return;
         }
-        
+
         $location = Location::findOrFail($this->deletingId);
         $this->authorize('delete', $location);
         $location->delete();
@@ -75,7 +69,7 @@ new #[Title('Location List')]
                     {{ trans_choice('{0} No location found|{1} 1 location|[2,*] :count locations', $this->getLocations->total()) }}
                 </flux:text>
             </div>
-            
+
             <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                 <flux:button :href="route('locations.create')" variant="primary" icon="plus" wire:navigate>
                     {{ __('New Location') }}
@@ -83,17 +77,12 @@ new #[Title('Location List')]
             </div>
         </div>
 
-        <div class="flex gap-3 sm:flex-cols-[1fr_12rem_12rem_auto]">
-            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass"
-                :placeholder="__('Search by name...')" />
+        @include('pages.partials.search-bar', ['placeholder' => __('Search by name...')])
 
-            @if ($search)
-                <flux:button wire:click="clearFilters" variant="subtle" icon='x-mark' />
-            @endif
-        </div>
 
         @if ($this->getLocations->isNotEmpty())
-            <ul class="mt-2 divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700">
+            <ul
+                class="mt-2 divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700">
                 @foreach ($this->getLocations as $location)
                     <li class="flex items-center justify-between gap-4 bg-white px-3 py-3 transition-colors hover:bg-zinc-50 dark:bg-zinc-800 dark:hover:bg-zinc-700/40 sm:px-6"
                         wire:key="location-{{ $location->id }}">
@@ -104,22 +93,22 @@ new #[Title('Location List')]
                         </div>
                         <div class="flex shrink-0 items-center gap-2">
                             <flux:dropdown position="bottom" align="end">
-                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"
-                                        inset="top bottom"
-                                        :aria-label="__('Actions for :name', ['name' => $location->name])" />
+                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"
+                                    inset="top bottom"
+                                    :aria-label="__('Actions for :name', ['name' => $location->name])" />
 
-                                    <flux:menu>
-                                        @can('update', $location)
-                                            <flux:menu.item icon="pencil-square" :href="route('locations.edit', $location)"
-                                                wire:navigate>{{ __('Edit') }}</flux:menu.item>
-                                        @endcan
-                                        @can('delete', $location)
-                                            <flux:menu.separator />
-                                            <flux:menu.item icon="trash" wire:click="confirmDelete({{ $location->id }})"
-                                                variant="danger">{{ __('Delete') }}</flux:menu.item>
-                                        @endcan
-                                    </flux:menu>
-                                </flux:dropdown>
+                                <flux:menu>
+                                    @can('update', $location)
+                                        <flux:menu.item icon="pencil-square" :href="route('locations.edit', $location)"
+                                            wire:navigate>{{ __('Edit') }}</flux:menu.item>
+                                    @endcan
+                                    @can('delete', $location)
+                                        <flux:menu.separator />
+                                        <flux:menu.item icon="trash" wire:click="confirmDelete({{ $location->id }})"
+                                            variant="danger">{{ __('Delete') }}</flux:menu.item>
+                                    @endcan
+                                </flux:menu>
+                            </flux:dropdown>
                         </div>
                     </li>
                 @endforeach
@@ -131,10 +120,9 @@ new #[Title('Location List')]
                 </div>
             @endif
         @else
-            <div class="rounded-xl border border-dashed border-zinc-300 px-4 py-12 text-center dark:border-zinc-700">
-                <flux:text>{{ __('No locations found.') }}</flux:text>
-            </div>
+            @include('pages.partials.empty-state', ['message' => __('No locations found.')])
         @endif
+
 
     </div>
 
