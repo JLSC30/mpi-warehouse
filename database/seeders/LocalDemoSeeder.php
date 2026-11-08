@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Location;
+use App\Models\Staff;
 use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -57,5 +58,8 @@ class LocalDemoSeeder extends Seeder
         Location::factory()->count(10)->create();
 
         Supplier::factory()->count(10)->create();
+
+        Staff::factory()->count(5)->create();
+        Staff::factory()->inactive()->count(5)->create();
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use App\Models\Location;
+use App\Models\Staff;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('suppliers/{supplier}/edit', 'pages::supplier.edit')
         ->middleware(['can:viewAny,'.Supplier::class, 'can:update,'.Supplier::class])
         ->name('suppliers.edit');
+
+    // Staff route
+    Route::livewire('staffs', 'pages::staff.index')
+        ->middleware('can:viewAny,'.Staff::class)
+        ->name('staffs.index');
+
+    Route::livewire('staffs/trash', 'pages::staff.trash')
+        ->middleware(['can:viewAny,'.Staff::class, 'can:forceDelete,'.Staff::class])
+        ->name('staffs.trash');
+
+    Route::livewire('staffs/create', 'pages::staff.create')
+        ->middleware(['can:viewAny,'.Staff::class, 'can:create,'.Staff::class])
+        ->name('staffs.create');
+
+    Route::livewire('staffs/{staff}/edit', 'pages::staff.edit')
+        ->middleware(['can:viewAny,'.Staff::class, 'can:update,staff'])
+        ->name('staffs.edit');
+
+    Route::livewire('staffs/{staff}/show', 'pages::staff.show')
+        ->middleware(['can:viewAny,'.Staff::class, 'can:view,staff'])
+        ->name('staffs.show');
 });
 
 require __DIR__.'/settings.php';
