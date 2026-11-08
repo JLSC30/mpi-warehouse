@@ -1,0 +1,163 @@
+<?php
+
+use Livewire\Component;
+
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Computed;
+use Livewire\WithPagination;
+use App\Models\Staff;
+use Livewire\Attributes\Url;
+use Flux\Flux;
+
+new #[Title('Staff Trash')] class extends Component {
+    use WithPagination;
+
+    #[Url(except: '')]
+    public string $search = '';
+
+    #[Computed]
+    public function getStaff()
+    {
+        return Staff::onlyTrashed()->latest('deleted_at')->filter($this->filters())->paginate(5);
+    }
+
+    private function filters(): array
+    {
+        return ['search' => $this->search];
+    }
+
+    public function clearFilters(): void
+    {
+        $this->reset('search');
+        $this->resetPage();
+    }
+
+    public function restore(int $id): void
+    {
+        $staff = Staff::onlyTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $staff);
+
+        $staff->restore();
+
+        Flux::toast(variant: 'success', heading: 'Restore', text: "\"{$staff->name}\" was restored.");
+    }
+
+    public ?int $deletingId = null;
+
+    public function confirmForceDelete(int $id): void
+    {
+        $this->deletingId = $id;
+
+        Flux::modal('force-delete')->show();
+    }
+
+    public function forceDelete(): void
+    {
+        if ($this->deletingId === null) {
+            return;
+        }
+
+        $staff = Staff::onlyTrashed()->findOrFail($this->deletingId);
+
+        $this->authorize('forceDelete', $staff);
+
+        $staff->forceDelete();
+
+        $this->deletingId = null;
+        Flux::modal('force-delete')->close();
+        Flux::toast(variant: 'success', heading: 'Force delete', text: "\"{$staff->name}\" was permanently deleted.");
+    }
+};
+?>
+
+<div>
+    <div class="flex flex-col gap-6">
+        {{-- HEADER --}}
+
+        <flux:breadcrumbs>
+            <flux:breadcrumbs.item :href="route('staff.index')" wire:navigate>
+                {{ __('Staff') }}
+            </flux:breadcrumbs.item>
+            <flux:breadcrumbs.item>
+                {{ __('Trash') }}
+            </flux:breadcrumbs.item>
+        </flux:breadcrumbs>
+
+        <flux:callout variant="danger" icon="x-circle"
+            :heading="__('Deleted staff stay here until you restore them or delete them for good.')" />
+
+        @include('pages.partials.search-bar', ['placeholder' => __('Search by name...')])
+
+        @if ($this->getStaff->isNotEmpty())
+            <ul
+                class="mt-2 divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700">
+                @foreach ($this->getStaff as $staff)
+                    <li class="flex items-center justify-between gap-4 bg-white px-3 py-3 transition-colors hover:bg-zinc-50 dark:bg-zinc-800 dark:hover:bg-zinc-700/40 sm:px-6"
+                        wire:key="staff-{{ $staff->id }}">
+                        <div class="flex min-w-0 flex-col gap-1">
+                            <span class="truncate font-medium text-zinc-900 dark:text-white">
+                                {{ $staff->name }}
+                            </span>
+                            <p class="text-sm text-zinc-500 dark:text-zinc-400">
+                                {{ $staff->is_active ? __('Active staff') : __('Inactive staff') }}
+                            </p>
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                                {{ __('Deleted :item', ['item' => $staff->deleted_at->diffForHumans()]) }}
+                            </span>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-2">
+                            <flux:dropdown position="bottom" align="end">
+                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal"
+                                    inset="top bottom"
+                                    :aria-label="__('Actions for :name', ['name' => $staff->name])" />
+
+                                <flux:menu>
+                                    @can('restore', $staff)
+                                        <flux:menu.item icon="arrow-uturn-left" size="sm"
+                                            wire:click="restore({{ $staff->id }})">{{ __('Restore') }}</flux:menu.item>
+                                    @endcan
+                                    @can('forceDelete', $staff)
+                                        <flux:menu.separator />
+                                        <flux:menu.item icon="trash" size="sm"
+                                            wire:click="confirmForceDelete({{ $staff->id }})" variant="danger">
+                                            {{ __('Delete forever') }}</flux:menu.item>
+                                    @endcan
+                                </flux:menu>
+                            </flux:dropdown>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+
+            @if ($this->getStaff->hasPages())
+                <div class="w-full overflow-x-auto">
+                    <flux:pagination :paginator="$this->getStaff" />
+                </div>
+            @endif
+        @else
+            @include('pages.partials.empty-state', ['message' => __('Trash is empty.')])
+        @endif
+
+    </div>
+
+    {{-- Delete modal --}}
+    <flux:modal name="force-delete" class="max-w-md">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">{{ __('Delete this staff forever?') }}</flux:heading>
+                <flux:text class="mt-2 text-zinc-500 dark:text-zinc-200">
+                    {{ __('The staff will be gone for good. This action cannot be undone.') }}
+                </flux:text>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <flux:modal.close>
+                    <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button wire:click="forceDelete" variant="danger">
+                    {{ __('Delete forever') }}</flux:button>
+            </div>
+        </div>
+    </flux:modal>
+</div>

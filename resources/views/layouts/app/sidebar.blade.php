@@ -25,36 +25,47 @@
         <flux:menu.separator />
 
         @can('viewAny', App\Models\Category::class)
-        <flux:sidebar.nav>
-            <flux:sidebar.group expandable :expanded="false" :heading="__('Categories')" class="grid">
-                <flux:sidebar.item :href="route('categories.index')"
-                    :current="request()->routeIs('categories.index')" wire:navigate>List</flux:sidebar.item>
-                <flux:sidebar.item :href="route('categories.trash')"
-                    :current="request()->routeIs('categories.trash')" wire:navigate>Trash</flux:sidebar.item>
-            </flux:sidebar.group>
-        </flux:sidebar.nav>
+            <flux:sidebar.nav>
+                <flux:sidebar.group expandable :expanded="false" :heading="__('Categories')" class="grid">
+                    <flux:sidebar.item :href="route('categories.index')" :current="request()->routeIs('categories.index')"
+                        wire:navigate>List</flux:sidebar.item>
+                    <flux:sidebar.item :href="route('categories.trash')" :current="request()->routeIs('categories.trash')"
+                        wire:navigate>Trash</flux:sidebar.item>
+                </flux:sidebar.group>
+            </flux:sidebar.nav>
         @endcan
 
         @can('viewAny', App\Models\Location::class)
-        <flux:sidebar.nav>
-            <flux:sidebar.group expandable :expanded="false" :heading="__('Locations')" class="grid">
-                <flux:sidebar.item :href="route('locations.index')"
-                    :current="request()->routeIs('locations.index')" wire:navigate>List</flux:sidebar.item>
-                <flux:sidebar.item :href="route('locations.trash')"
-                    :current="request()->routeIs('locations.trash')" wire:navigate>Trash</flux:sidebar.item>
-            </flux:sidebar.group>
-        </flux:sidebar.nav>
+            <flux:sidebar.nav>
+                <flux:sidebar.group expandable :expanded="false" :heading="__('Locations')" class="grid">
+                    <flux:sidebar.item :href="route('locations.index')" :current="request()->routeIs('locations.index')"
+                        wire:navigate>List</flux:sidebar.item>
+                    <flux:sidebar.item :href="route('locations.trash')" :current="request()->routeIs('locations.trash')"
+                        wire:navigate>Trash</flux:sidebar.item>
+                </flux:sidebar.group>
+            </flux:sidebar.nav>
         @endcan
 
         @can('viewAny', App\Models\Supplier::class)
-        <flux:sidebar.nav>
-            <flux:sidebar.group expandable :expanded="false" :heading="__('Supplier')" class="grid">
-                <flux:sidebar.item :href="route('suppliers.index')"
-                    :current="request()->routeIs('suppliers.index')" wire:navigate>List</flux:sidebar.item>
-                <flux:sidebar.item :href="route('suppliers.trash')"
-                    :current="request()->routeIs('suppliers.trash')" wire:navigate>Trash</flux:sidebar.item>
-            </flux:sidebar.group>
-        </flux:sidebar.nav>
+            <flux:sidebar.nav>
+                <flux:sidebar.group expandable :expanded="false" :heading="__('Supplier')" class="grid">
+                    <flux:sidebar.item :href="route('suppliers.index')" :current="request()->routeIs('suppliers.index')"
+                        wire:navigate>List</flux:sidebar.item>
+                    <flux:sidebar.item :href="route('suppliers.trash')" :current="request()->routeIs('suppliers.trash')"
+                        wire:navigate>Trash</flux:sidebar.item>
+                </flux:sidebar.group>
+            </flux:sidebar.nav>
+        @endcan
+
+        @can('viewAny', App\Models\Staff::class)
+            <flux:sidebar.nav>
+                <flux:sidebar.group expandable :expanded="false" :heading="__('Staff')" class="grid">
+                    <flux:sidebar.item :href="route('staff.index')" :current="request()->routeIs('staff.index')"
+                        wire:navigate>List</flux:sidebar.item>
+                    <flux:sidebar.item :href="route('staff.trash')" :current="request()->routeIs('staff.trash')"
+                        wire:navigate>Trash</flux:sidebar.item>
+                </flux:sidebar.group>
+            </flux:sidebar.nav>
         @endcan
 
         <flux:spacer />
