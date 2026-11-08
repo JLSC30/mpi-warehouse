@@ -10,9 +10,9 @@ test('staff list shows the total number of staff across pages', function () {
     $admin->forceFill(['is_admin' => true])->save();
 
     $this->actingAs($admin)
-        ->get(route('staffs.index'))
+        ->get(route('staff.index'))
         ->assertOk()
-        ->assertSee('20 staffs');
+        ->assertSee('20 staff');
 });
 
 test('staff search matches names', function () {
@@ -23,7 +23,7 @@ test('staff search matches names', function () {
     $admin->forceFill(['is_admin' => true])->save();
 
     $this->actingAs($admin)
-        ->get(route('staffs.index', ['search' => 'Needle']))
+        ->get(route('staff.index', ['search' => 'Needle']))
         ->assertOk()
         ->assertSee('Needle Staff')
         ->assertDontSee('Other Staff');
@@ -37,8 +37,8 @@ test('staff list does not show staff in the trash', function () {
     $admin->forceFill(['is_admin' => true])->save();
 
     $this->actingAs($admin)
-        ->get(route('staffs.index'))
+        ->get(route('staff.index'))
         ->assertOk()
         ->assertDontSee('Deleted Staff')
-        ->assertSee('No staffs found.');
+        ->assertSee('No staff found.');
 });

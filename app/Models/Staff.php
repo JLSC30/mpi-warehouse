@@ -27,6 +27,13 @@ class Staff extends Model
         return $this->belongsTo(User::class);
     }
 
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
+
     /**
      * Scope a query using the staff filters.
      *

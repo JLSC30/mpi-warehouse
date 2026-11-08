@@ -4,8 +4,7 @@ use App\Models\Staff;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Staff Details')] class extends Component
-{
+new #[Title('Staff Details')] class extends Component {
     public Staff $staff;
 
     public function mount(Staff $staff): void
@@ -20,7 +19,7 @@ new #[Title('Staff Details')] class extends Component
 <div>
     <div class="flex flex-col gap-6">
         <flux:breadcrumbs>
-            <flux:breadcrumbs.item :href="route('staffs.index')" wire:navigate>
+            <flux:breadcrumbs.item :href="route('staff.index')" wire:navigate>
                 {{ __('Staff') }}
             </flux:breadcrumbs.item>
             <flux:breadcrumbs.item>
@@ -38,12 +37,11 @@ new #[Title('Staff Details')] class extends Component
             </div>
 
             <div class="flex gap-2">
-                <flux:button :href="route('staffs.index')" variant="ghost" wire:navigate>
+                <flux:button :href="route('staff.index')" variant="ghost" wire:navigate>
                     {{ __('Back to staff') }}
                 </flux:button>
                 @can('update', $staff)
-                    <flux:button :href="route('staffs.edit', $staff)" variant="primary" icon="pencil-square"
-                        wire:navigate>
+                    <flux:button :href="route('staff.edit', $staff)" variant="primary" icon="pencil-square" wire:navigate>
                         {{ __('Edit staff') }}
                     </flux:button>
                 @endcan

@@ -16,7 +16,7 @@ test('staff form creates a staff member with the selected user and active state'
         ->set('form.user_id', $user->id)
         ->call('save')
         ->assertHasNoErrors()
-        ->assertRedirect(route('staffs.index'));
+        ->assertRedirect(route('staff.index'));
 
     $this->assertDatabaseHas('staff', [
         'name' => 'Staff A',
@@ -46,4 +46,19 @@ test('staff form filters user choices by name or email', function () {
         ->set('userSearch', 'searchable@example.com')
         ->assertSee($matchingUser->name)
         ->assertDontSee($otherUser->name);
+});
+
+test('staff form creates a staff member without a linked user', function () {
+    $admin = User::factory()->create();
+    $admin->forceFill(['is_admin' => true])->save();
+
+    $this->actingAs($admin);
+
+    Livewire::test('pages::staff.create')
+        ->set('form.name', 'Unlinked Staff')
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertRedirect(route('staff.index'));
+
+    $this->assertDatabaseHas('staff', ['name' => 'Unlinked Staff', 'user_id' => null]);
 });

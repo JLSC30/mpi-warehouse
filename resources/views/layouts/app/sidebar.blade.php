@@ -60,9 +60,9 @@
         @can('viewAny', App\Models\Staff::class)
             <flux:sidebar.nav>
                 <flux:sidebar.group expandable :expanded="false" :heading="__('Staff')" class="grid">
-                    <flux:sidebar.item :href="route('staffs.index')" :current="request()->routeIs('staffs.index')"
+                    <flux:sidebar.item :href="route('staff.index')" :current="request()->routeIs('staff.index')"
                         wire:navigate>List</flux:sidebar.item>
-                    <flux:sidebar.item :href="route('staffs.trash')" :current="request()->routeIs('staffs.trash')"
+                    <flux:sidebar.item :href="route('staff.trash')" :current="request()->routeIs('staff.trash')"
                         wire:navigate>Trash</flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>

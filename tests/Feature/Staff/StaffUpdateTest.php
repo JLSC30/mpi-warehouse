@@ -17,7 +17,7 @@ test('staff edit page loads and updates the staff fields', function () {
 
     $this->actingAs($admin);
 
-    $this->get(route('staffs.edit', $staff))->assertOk();
+    $this->get(route('staff.edit', $staff))->assertOk();
 
     Livewire::test('pages::staff.edit', ['staff' => $staff])
         ->assertSet('form.name', 'Original Staff')
@@ -28,7 +28,7 @@ test('staff edit page loads and updates the staff fields', function () {
         ->set('form.user_id', $newUser->id)
         ->call('save')
         ->assertHasNoErrors()
-        ->assertRedirect(route('staffs.index'));
+        ->assertRedirect(route('staff.index'));
 
     $this->assertDatabaseHas('staff', [
         'id' => $staff->id,

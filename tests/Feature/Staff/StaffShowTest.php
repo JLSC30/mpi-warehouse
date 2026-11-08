@@ -16,7 +16,7 @@ test('staff show page displays staff details and assigned user', function () {
     $admin->forceFill(['is_admin' => true])->save();
 
     $this->actingAs($admin)
-        ->get(route('staffs.show', $staff))
+        ->get(route('staff.show', $staff))
         ->assertOk()
         ->assertSee('Staff A')
         ->assertSee('Inactive')
@@ -33,7 +33,7 @@ test('staff show page handles an unassigned user', function () {
     $admin->forceFill(['is_admin' => true])->save();
 
     $this->actingAs($admin)
-        ->get(route('staffs.show', $staff))
+        ->get(route('staff.show', $staff))
         ->assertOk()
         ->assertSee('No user assigned');
 });

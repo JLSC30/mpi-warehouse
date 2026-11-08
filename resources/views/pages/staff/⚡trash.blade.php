@@ -16,7 +16,7 @@ new #[Title('Staff Trash')] class extends Component {
     public string $search = '';
 
     #[Computed]
-    public function getStaffs()
+    public function getStaff()
     {
         return Staff::onlyTrashed()->latest('deleted_at')->filter($this->filters())->paginate(5);
     }
@@ -76,7 +76,7 @@ new #[Title('Staff Trash')] class extends Component {
         {{-- HEADER --}}
 
         <flux:breadcrumbs>
-            <flux:breadcrumbs.item :href="route('staffs.index')" wire:navigate>
+            <flux:breadcrumbs.item :href="route('staff.index')" wire:navigate>
                 {{ __('Staff') }}
             </flux:breadcrumbs.item>
             <flux:breadcrumbs.item>
@@ -85,14 +85,14 @@ new #[Title('Staff Trash')] class extends Component {
         </flux:breadcrumbs>
 
         <flux:callout variant="danger" icon="x-circle"
-            :heading="__('Deleted staffs stay here until you restore them or delete them for good.')" />
+            :heading="__('Deleted staff stay here until you restore them or delete them for good.')" />
 
         @include('pages.partials.search-bar', ['placeholder' => __('Search by name...')])
 
-        @if ($this->getStaffs->isNotEmpty())
+        @if ($this->getStaff->isNotEmpty())
             <ul
                 class="mt-2 divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700">
-                @foreach ($this->getStaffs as $staff)
+                @foreach ($this->getStaff as $staff)
                     <li class="flex items-center justify-between gap-4 bg-white px-3 py-3 transition-colors hover:bg-zinc-50 dark:bg-zinc-800 dark:hover:bg-zinc-700/40 sm:px-6"
                         wire:key="staff-{{ $staff->id }}">
                         <div class="flex min-w-0 flex-col gap-1">
@@ -130,9 +130,9 @@ new #[Title('Staff Trash')] class extends Component {
                 @endforeach
             </ul>
 
-            @if ($this->getStaffs->hasPages())
+            @if ($this->getStaff->hasPages())
                 <div class="w-full overflow-x-auto">
-                    <flux:pagination :paginator="$this->getStaffs" />
+                    <flux:pagination :paginator="$this->getStaff" />
                 </div>
             @endif
         @else

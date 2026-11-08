@@ -10,8 +10,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('New Staff')] class extends Component
-{
+new #[Title('New Staff')] class extends Component {
     public StaffForm $form;
 
     public string $userSearch = '';
@@ -25,15 +24,12 @@ new #[Title('New Staff')] class extends Component
         $search = trim($this->userSearch);
 
         $users = User::query()
-            ->when($search !== '', fn (Builder $query) => $query->where(
-                fn (Builder $query) => $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%"),
-            ))
+            ->when($search !== '', fn(Builder $query) => $query->where(fn(Builder $query) => $query->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%")))
             ->orderBy('name')
             ->limit(20)
             ->get(['id', 'name', 'email']);
 
-        if ($this->form->user_id !== null && ! $users->contains('id', $this->form->user_id)) {
+        if ($this->form->user_id !== null && !$users->contains('id', $this->form->user_id)) {
             $selectedUser = User::query()->find($this->form->user_id, ['id', 'name', 'email']);
 
             if ($selectedUser !== null) {
@@ -53,9 +49,9 @@ new #[Title('New Staff')] class extends Component
     {
         $staff = $this->form->store();
 
-        Flux::toast(variant: 'success', heading: 'Create', text: "\"{$staff->name}\" ".__('has been created.'));
+        Flux::toast(variant: 'success', heading: 'Create', text: "\"{$staff->name}\" " . __('has been created.'));
 
-        $this->redirectRoute('staffs.index', navigate: true);
+        $this->redirectRoute('staff.index', navigate: true);
     }
 };
 ?>
@@ -65,7 +61,7 @@ new #[Title('New Staff')] class extends Component
         {{-- HEADER --}}
 
         <flux:breadcrumbs>
-            <flux:breadcrumbs.item :href="route('staffs.index')" wire:navigate>
+            <flux:breadcrumbs.item :href="route('staff.index')" wire:navigate>
                 {{ __('Staff') }}
             </flux:breadcrumbs.item>
             <flux:breadcrumbs.item>
@@ -79,7 +75,7 @@ new #[Title('New Staff')] class extends Component
     <form wire:submit="save" class="space-y-6">
         @include('pages.staff.partials.form')
         <div class="flex items-center justify-end gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-700">
-            <flux:button :href="route('staffs.index')" variant="ghost" wire:navigate>{{ __('Cancel') }}</flux:button>
+            <flux:button :href="route('staff.index')" variant="ghost" wire:navigate>{{ __('Cancel') }}</flux:button>
             <flux:button type="submit" variant="primary">{{ __('Create staff') }}</flux:button>
         </div>
 

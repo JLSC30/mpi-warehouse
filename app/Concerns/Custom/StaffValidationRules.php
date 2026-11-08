@@ -17,7 +17,7 @@ trait StaffValidationRules
         return [
             'name' => ['required', 'string', 'max:32', Rule::unique(Staff::class)->ignore($staff)->where(fn ($query) => $query->whereNull('deleted_at'))],
             'is_active' => ['boolean'],
-            'user_id' => ['nullable', 'integer', Rule::exists(User::class, 'id'), Rule::unique(Staff::class, 'user_id')->ignore($staff)],
+            'user_id' => ['nullable', 'integer', Rule::exists(User::class, 'id'), Rule::unique(Staff::class, 'user_id')->ignore($staff)->where(fn ($query) => $query->whereNull('deleted_at'))],
         ];
     }
 

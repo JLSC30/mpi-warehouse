@@ -53,7 +53,7 @@ new #[Title('Edit Staff')] class extends Component {
         $staff = $this->form->update();
         Flux::toast(variant: 'success', heading: 'Update', text: "\"{$staff->name}\" updated successfully!");
 
-        $this->redirectRoute('staffs.index', navigate: true);
+        $this->redirectRoute('staff.index', navigate: true);
     }
 };
 ?>
@@ -63,7 +63,7 @@ new #[Title('Edit Staff')] class extends Component {
         {{-- HEADER --}}
 
         <flux:breadcrumbs>
-            <flux:breadcrumbs.item :href="route('staffs.index')" wire:navigate>
+            <flux:breadcrumbs.item :href="route('staff.index')" wire:navigate>
                 {{ __('Staff') }}
             </flux:breadcrumbs.item>
             <flux:breadcrumbs.item>
@@ -81,7 +81,7 @@ new #[Title('Edit Staff')] class extends Component {
             @include('pages.staff.partials.form')
             <div class="flex items-center justify-end gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-700">
                 <flux:text wire:dirty wire:target="form" class="me-auto">{{ __('You have unsaved changes.') }}</flux:text>
-                <flux:button :href="route('staffs.index')" variant="ghost" wire:navigate>{{ __('Cancel') }}
+                <flux:button :href="route('staff.index')" variant="ghost" wire:navigate>{{ __('Cancel') }}
                 </flux:button>
                 <flux:button type="submit" variant="primary">{{ __('Update staff') }}</flux:button>
             </div>

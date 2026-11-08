@@ -63,25 +63,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('suppliers.edit');
 
     // Staff route
-    Route::livewire('staffs', 'pages::staff.index')
+    Route::livewire('staff', 'pages::staff.index')
         ->middleware('can:viewAny,'.Staff::class)
-        ->name('staffs.index');
+        ->name('staff.index');
 
-    Route::livewire('staffs/trash', 'pages::staff.trash')
+    Route::livewire('staff/trash', 'pages::staff.trash')
         ->middleware(['can:viewAny,'.Staff::class, 'can:forceDelete,'.Staff::class])
-        ->name('staffs.trash');
+        ->name('staff.trash');
 
-    Route::livewire('staffs/create', 'pages::staff.create')
+    Route::livewire('staff/create', 'pages::staff.create')
         ->middleware(['can:viewAny,'.Staff::class, 'can:create,'.Staff::class])
-        ->name('staffs.create');
+        ->name('staff.create');
 
-    Route::livewire('staffs/{staff}/edit', 'pages::staff.edit')
+    Route::livewire('staff/{staff}/edit', 'pages::staff.edit')
         ->middleware(['can:viewAny,'.Staff::class, 'can:update,staff'])
-        ->name('staffs.edit');
+        ->name('staff.edit');
 
-    Route::livewire('staffs/{staff}/show', 'pages::staff.show')
+    Route::livewire('staff/{staff}/show', 'pages::staff.show')
         ->middleware(['can:viewAny,'.Staff::class, 'can:view,staff'])
-        ->name('staffs.show');
+        ->name('staff.show');
 });
 
 require __DIR__.'/settings.php';

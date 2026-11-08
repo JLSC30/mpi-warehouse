@@ -15,7 +15,7 @@ new #[Title('Staff List')] class extends Component {
     public string $search = '';
 
     #[Computed]
-    public function getStaffs()
+    public function getStaff()
     {
         return Staff::query()->filter($this->filters())->orderBy('created_at', 'desc')->paginate(5);
     }
@@ -62,16 +62,16 @@ new #[Title('Staff List')] class extends Component {
         <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
                 <flux:heading size="xl" level="1">
-                    {{ __('Staffs') }}
+                    {{ __('Staff') }}
                 </flux:heading>
 
                 <flux:text class="mt-1">
-                    {{ trans_choice('{0} No staff found|{1} 1 staff|[2,*] :count staffs', $this->getStaffs->total()) }}
+                    {{ trans_choice('{0} No staff found|{1} 1 staff|[2,*] :count staff', $this->getStaff->total()) }}
                 </flux:text>
             </div>
 
             <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                <flux:button :href="route('staffs.create')" variant="primary" icon="plus" wire:navigate>
+                <flux:button :href="route('staff.create')" variant="primary" icon="plus" wire:navigate>
                     {{ __('New Staff') }}
                 </flux:button>
             </div>
@@ -80,10 +80,10 @@ new #[Title('Staff List')] class extends Component {
         @include('pages.partials.search-bar', ['placeholder' => __('Search by name...')])
 
 
-        @if ($this->getStaffs->isNotEmpty())
+        @if ($this->getStaff->isNotEmpty())
             <ul
                 class="mt-2 divide-y divide-zinc-200 overflow-hidden rounded-xl border border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700">
-                @foreach ($this->getStaffs as $staff)
+                @foreach ($this->getStaff as $staff)
                     <li class="flex items-center justify-between gap-4 bg-white px-3 py-3 transition-colors hover:bg-zinc-50 dark:bg-zinc-800 dark:hover:bg-zinc-700/40 sm:px-6"
                         wire:key="staff-{{ $staff->id }}">
                         <div class="flex min-w-0 flex-col gap-1">
@@ -102,11 +102,11 @@ new #[Title('Staff List')] class extends Component {
 
                                 <flux:menu>
                                     @can('view', $staff)
-                                        <flux:menu.item icon="eye" :href="route('staffs.show', $staff)" wire:navigate>
+                                        <flux:menu.item icon="eye" :href="route('staff.show', $staff)" wire:navigate>
                                             {{ __('View') }}</flux:menu.item>
                                     @endcan
                                     @can('update', $staff)
-                                        <flux:menu.item icon="pencil-square" :href="route('staffs.edit', $staff)"
+                                        <flux:menu.item icon="pencil-square" :href="route('staff.edit', $staff)"
                                             wire:navigate>{{ __('Edit') }}</flux:menu.item>
                                     @endcan
                                     @can('delete', $staff)
@@ -121,13 +121,13 @@ new #[Title('Staff List')] class extends Component {
                 @endforeach
             </ul>
 
-            @if ($this->getStaffs->hasPages())
+            @if ($this->getStaff->hasPages())
                 <div class="w-full overflow-x-auto">
-                    <flux:pagination :paginator="$this->getStaffs" />
+                    <flux:pagination :paginator="$this->getStaff" />
                 </div>
             @endif
         @else
-            @include('pages.partials.empty-state', ['message' => __('No staffs found.')])
+            @include('pages.partials.empty-state', ['message' => __('No staff found.')])
         @endif
 
 
