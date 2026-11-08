@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Livewire\Livewire;
+use App\Models\Staff;
 
 test('staff form creates a staff member with the selected user and active state', function () {
     $admin = User::factory()->create();
@@ -61,4 +62,43 @@ test('staff form creates a staff member without a linked user', function () {
         ->assertRedirect(route('staff.index'));
 
     $this->assertDatabaseHas('staff', ['name' => 'Unlinked Staff', 'user_id' => null]);
+});
+
+test('staff form rejects a user already assigned to another staff member', function () {
+    $user = User::factory()->create();
+    Staff::factory()->create(['user_id' => $user->id]);
+
+    $admin = User::factory()->create();
+    $admin->forceFill(['is_admin' => true])->save();
+
+    $this->actingAs($admin);
+
+    Livewire::test('pages::staff.create')
+        ->set('form.name', 'Second Staff')
+        ->set('form.user_id', $user->id)
+        ->call('save')
+        ->assertHasErrors(['form.user_id' => 'unique']);
+
+    $this->assertDatabaseCount('staff', 1);
+    $this->assertDatabaseMissing('staff', ['name' => 'Second Staff']);
+});
+
+test('staff form allows reusing a user from a trashed staff member', function () {
+    $user = User::factory()->create();
+    $trashed = Staff::factory()->create(['name' => 'Old Staff', 'user_id' => $user->id]);
+    $trashed->delete();
+
+    $admin = User::factory()->create();
+    $admin->forceFill(['is_admin' => true])->save();
+
+    $this->actingAs($admin);
+
+    Livewire::test('pages::staff.create')
+        ->set('form.name', 'New Staff')
+        ->set('form.user_id', $user->id)
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertRedirect(route('staff.index'));
+
+    $this->assertDatabaseHas('staff', ['name' => 'New Staff', 'user_id' => $user->id]);
 });

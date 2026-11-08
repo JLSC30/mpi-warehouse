@@ -23,7 +23,13 @@ new #[Title('Edit Staff')] class extends Component {
     {
         $search = trim($this->userSearch);
 
+        $linkedUserIds = Staff::query()
+            ->whereNotNull('user_id')
+            ->when($this->form->staff !== null, fn(Builder $query) => $query->where('id', '!=', $this->form->staff->id))
+            ->pluck('user_id');
+
         $users = User::query()
+            ->whereNotIn('id', $linkedUserIds)
             ->when($search !== '', fn(Builder $query) => $query->where(fn(Builder $query) => $query->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%")))
             ->orderBy('name')
             ->limit(20)

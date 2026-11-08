@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,10 +16,12 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->boolean('is_active')->default(true);
-            $table->foreignId('user_id')->nullable()->unique()->constrained('users')->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::statement('CREATE UNIQUE INDEX staff_user_id_unique ON staff (user_id) WHERE deleted_at IS NULL');
     }
 
     /**
