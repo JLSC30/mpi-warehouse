@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Staff;
 use App\Models\User;
 use Livewire\Livewire;
-use App\Models\Staff;
 
 test('staff form creates a staff member with the selected user and active state', function () {
     $admin = User::factory()->create();
