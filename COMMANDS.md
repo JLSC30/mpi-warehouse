@@ -88,9 +88,3 @@ php artisan test tests/Feature/CategoryListTest.php --compact
 php artisan view:clear
 php artisan test tests/Feature/CategoryListTest.php --compact
 ```
-
-```bash
-php artisan make:trait Concerns/Custom/CategoryValidationRules
-php artisan livewire:form CategoryForm
-php artisan make:policy CategoryPolicy --model=Category
-```

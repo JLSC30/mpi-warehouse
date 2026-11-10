@@ -19,7 +19,8 @@ class CategoryFactory extends Factory
     {
         return [
             'code' => fake()->unique()->bothify('CAT-####'),
-            'name' => fake()->words(2, true),
+            'name' => fake()->unique()->words(2, true),
+
         ];
     }
 }
